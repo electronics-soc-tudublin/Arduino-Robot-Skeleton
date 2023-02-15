@@ -42,7 +42,7 @@ void setup(){
     servo.attach(10);
 
     servo.write(90);
-    
+
     // // Tests
     robot.start();
 
@@ -71,5 +71,4 @@ bool RUN = true;
 
 void loop() {
     // 
-        
 }

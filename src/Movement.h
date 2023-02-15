@@ -18,8 +18,8 @@ public:
     void brake();
     void forward(int pwm);
     void reverse(int pwm);
-    void turnLeft(int pwm = 255, int angle = 1000);
-    void turnRight(int pwm = 255, int angle = 1000);
+    void turnLeft(int pwm, int angle);
+    void turnRight(int pwm, int angle);
     void initMotors();
 private:
 
