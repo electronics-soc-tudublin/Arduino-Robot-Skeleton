@@ -9,8 +9,6 @@
 #define THRESHOLD 30
 #define SPEED 127
 
-bool run = true;
-
 Movement robot;
 NewPing ultraSonic(13, 12, 400);
 Servo servo;
@@ -44,7 +42,7 @@ void setup(){
     servo.attach(10);
 
     servo.write(90);
-
+    
     // // Tests
     robot.start();
 
@@ -69,7 +67,7 @@ void setup(){
     // while(1);
 }
 
-
+bool RUN = true;
 
 void loop() {
     // Serial.print("Left: "); // left
@@ -80,7 +78,7 @@ void loop() {
     // Serial.println(checkObstacle(180, 20));
 
 
-    if (run) {
+    if (RUN) {
         int degSum = 0;
 
         // Check if the path is clear
