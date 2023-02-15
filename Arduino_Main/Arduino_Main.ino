@@ -70,59 +70,6 @@ void setup(){
 bool RUN = true;
 
 void loop() {
-    // Serial.print("Left: "); // left
-    // Serial.println(checkObstacle(0, 20));
-    // Serial.print("Forward: "); //forward
-    // Serial.println(checkObstacle(90, 20));
-    // Serial.print("Right "); // right
-    // Serial.println(checkObstacle(180, 20));
-
-
-    if (RUN) {
-        int degSum = 0;
-
-        // Check if the path is clear
-        if (!checkSensor(THRESHOLD))
-        {
-            robot.forward(SPEED);
-        }
-        else {
-            robot.brake();
-            // Check if I can turn right
-            if (!checkObstacle(RIGHT_HEADING, THRESHOLD))
-            {
-                robot.turnRight(SPEED);
-                robot.forward(SPEED);
-                degSum += 90;
-            } else if (!checkObstacle(LEFT_HEADING, THRESHOLD))
-            {
-                robot.turnLeft(SPEED);
-                robot.forward(SPEED);
-                degSum -= 90;
-            } else
-            {
-                robot.turnRight(SPEED);
-                robot.turnRight(SPEED);
-                robot.forward(SPEED);
-                degSum += 180;
-            }
-        }
-    }
+    // 
+        
 }
-
-/*
-while “in maze”
-    counter = 1
-    while counter != 0
-        counter = 0
-        if you can go forward
-            go forward
-        if you can turn right
-            counter += 90
-            you turn right
-        if you can turn left
-            counter -= 90
-            you turn left
-        else
-            go back
-*/
