@@ -10,8 +10,14 @@ class Driver{
     void enable();
     void disable();
 
-    Motor motor_l;
+    void forward(int speed);
+    void reverse(int speed);
+    void left(int speed);
+    void right(int speed);
+    void stop();
+
     Motor motor_r;
+    Motor motor_l;
 
   private:
     uint8_t dir_l;
