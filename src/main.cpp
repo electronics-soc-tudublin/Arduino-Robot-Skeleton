@@ -1,6 +1,9 @@
 #include <Arduino.h>
 #include <Servo.h>
 #include <Driver.h>
+#include <NewPing.h>
+#include <Adafruit_MPU6050.h>
+
 
 constexpr uint8_t speed = 150;
 
@@ -34,38 +37,47 @@ void stop(){
   driver.disable();
 }
 
-int a0;
-int a1;
-int a2;
+int ir_l;
+int ir_m;
+int ir_r;
+
+int pin_ir_l = A0;
+int pin_ir_m = A1;
+int pin_ir_r = A2;
 
 char buff[265];
+
+int samples[2];
+// Trigger pin 13, Echo pin 12
+NewPing ping(13, 12);
+int btn_pin = 2;
 
 void setup() {
   driver.begin();
   driver.enable();
-  Serial.begin(115200);
+  Serial.begin(115000);
+
+  while(digitalRead(btn_pin));
+  forward(127);
 }
 
 void loop() {
-  a0 = analogRead(A0);
-  a1 = analogRead(A1);
-  a2 = analogRead(A2);
+  ir_m = analogRead(pin_ir_m);
 
-  // a0 = digitalRead(A0);
-  // a1 = digitalRead(A1);
-  // a2 = digitalRead(A2);
-
-  if(a0 > 650){
-    forward(speed);
+  if(ir_m > 100){
+    sprintf(buff, "DETECTED: %d", ir_m);
+    digitalWrite(13, HIGH);
+    driver.disable();
+    // Delay to account for the robots momentum
+    delay(300);
   }
-  else if(a1 > 650){
-    left(speed);
-  }
-  else if(a2 > 650){
-    right(speed);
+  else
+  {
+    sprintf(buff, "NOT: %d", ir_m);
+    digitalWrite(13, LOW);
+    driver.enable();
   }
 
-  sprintf(buff, "/*%d;%d;%d*/\n", a0, a1, a2);
-  Serial.print(buff);
+  Serial.println(buff);
   delay(10);
 }
