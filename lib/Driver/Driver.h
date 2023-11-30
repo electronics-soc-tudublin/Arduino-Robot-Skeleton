@@ -11,6 +11,7 @@ class Driver{
     void disable();
 
     void forward(int speed);
+    void imu_forward(int speed);
     void reverse(int speed);
     void left(int speed);
     void right(int speed);

@@ -53,14 +53,19 @@ void setup() {
   last_time = millis();
 }
 
-void loop() {
-
+void get_yaw(float* _yaw){
   if (millis() - last_time >= SAMPLE_PERIOD){
     mpu.getEvent(&a, &g, &temp);
     auto gz = g.gyro.z;
     yaw += (gz - gyro_off) * (millis() - last_time)/1000.0f;
+    if(fabs(yaw) < 0.05)
+      yaw = 0.0;
     last_time = millis();
   }
+}
+void loop() {
+  static float yaw;
+  get_yaw(&yaw);
 
   Serial.print("Yaw(rad): ");
   Serial.print(yaw);
@@ -80,7 +85,6 @@ void loop() {
   {
     driver.disable();
   }
-
 
   delay(SAMPLE_PERIOD);
 }
