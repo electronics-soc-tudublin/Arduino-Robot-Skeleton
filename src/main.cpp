@@ -18,6 +18,12 @@ Adafruit_MPU6050 mpu;
 float gyro_off;
 sensors_event_t a, g, temp;
 
+float delta_z = 0;
+float yaw = 0;
+
+unsigned long now;
+unsigned long last_time;
+
 void setup() {
   while(digitalRead(RUN_BUTTON));
   Serial.begin(115200);
@@ -42,20 +48,19 @@ void setup() {
   Serial.print("Calibration complete. Offset value: ");
   Serial.print(gyro_off);
   Serial.println();
-  // driver.begin();
-  // driver.enable();
+  driver.begin();
+  driver.enable();
+  last_time = millis();
 }
 
-float delta_z = 0;
-float yaw = 0;
-
-unsigned long now;
-unsigned long last_time;
 void loop() {
-  mpu.getEvent(&a, &g, &temp);
-  auto gz = g.gyro.z;
 
-  yaw += (gz - gyro_off) * (millis() - last_time)/1000.0f;
+  if (millis() - last_time >= SAMPLE_PERIOD){
+    mpu.getEvent(&a, &g, &temp);
+    auto gz = g.gyro.z;
+    yaw += (gz - gyro_off) * (millis() - last_time)/1000.0f;
+    last_time = millis();
+  }
 
   Serial.print("Yaw(rad): ");
   Serial.print(yaw);
@@ -65,6 +70,17 @@ void loop() {
   Serial.print(';');
   Serial.println();
 
-  last_time = millis();
+  if (yaw*RAD_TO_DEG < -5){
+    driver.right(100);
+  }
+  else if (yaw*RAD_TO_DEG > 5){
+    driver.left(100);
+  }
+  else
+  {
+    driver.disable();
+  }
+
+
   delay(SAMPLE_PERIOD);
 }
